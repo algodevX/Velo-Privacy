@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- A padlock with a crossed-out eye: locked away, not watched. -->
+  <rect width="128" height="128" rx="30" fill="#2353F5"/>
+  <path d="M44 60V46a20 20 0 0 1 40 0v14" fill="none" stroke="#A9BCFF" stroke-width="12"/>
+  <rect x="26" y="56" width="76" height="54" rx="16" fill="#fff"/>
+  <path d="M41 83c13-15 33-15 46 0-13 15-33 15-46 0Z" fill="none" stroke="#2353F5" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="64" cy="83" r="7.5" fill="#2353F5"/>
+  <path d="M47 100 81 66" stroke="#fff" stroke-width="12" stroke-linecap="round"/>
+  <path d="M47 100 81 66" stroke="#2353F5" stroke-width="6" stroke-linecap="round"/>
+</svg>

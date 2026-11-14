@@ -1,0 +1,87 @@
+# Publishes a new version. Runs only when a maintainer starts it from the Actions tab
+# and enters a version number, so merged changes are never released by accident.
+#
+# It sets the version in package.json (and so in every manifest), runs the checks,
+# builds every browser, commits "Release vX.Y.Z", tags it, and publishes a GitHub
+# release with the Chromium and Firefox zips attached.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version, for example 1.2.0 (must be higher than the current one)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency: release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Validate version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Version must look like 1.2.3 (browser stores accept only numbers and dots)."
+            exit 1
+          fi
+          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" >/dev/null; then
+            echo "::error::v$VERSION has already been released."
+            exit 1
+          fi
+          CURRENT=$(node -p "require('./package.json').version")
+          HIGHEST=$(printf '%s\n%s\n' "$CURRENT" "$VERSION" | sort -V | tail -n1)
+          if [ "$HIGHEST" != "$VERSION" ]; then
+            echo "::error::$VERSION is lower than the current version $CURRENT."
+            exit 1
+          fi
+
+      - run: npm ci
+      - name: Set version
+        run: npm version "${{ inputs.version }}" --no-git-tag-version --allow-same-version
+      - run: npm run check
+      - run: npm run build
+
+      - name: Package
+        run: |
+          for target in chromium firefox; do
+            (cd "dist/$target" && zip -qr -X "../velo-privacy-$target.zip" .)
+          done
+
+      - name: Commit and tag
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if ! git diff --quiet; then
+            git commit -am "Release v$VERSION"
+          fi
+          git tag "v$VERSION"
+          git push origin HEAD:main "v$VERSION"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          gh release create "v$VERSION" \
+            dist/velo-privacy-chromium.zip \
+            dist/velo-privacy-firefox.zip \
+            --title "Velo Privacy $VERSION" \
+            --generate-notes \
+            --latest

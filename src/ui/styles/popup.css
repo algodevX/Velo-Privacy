@@ -1,0 +1,277 @@
+/* The toolbar popup. */
+
+/*
+ * Browsers size the popup to its content, up to 800 by 600 pixels. A fixed width on the
+ * body is what they measure; widths relative to the viewport would keep it at the tiny
+ * size it opens with.
+ */
+body {
+  width: 380px;
+  background: var(--color-surface-container);
+}
+
+.popup {
+  display: grid;
+  gap: 8px;
+  padding: 8px 8px 12px;
+}
+
+.popup-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  padding: 0 4px 0 12px;
+}
+
+.popup-brand {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* The current site and its controls. */
+.site-card {
+  display: grid;
+  gap: 16px;
+  padding: 20px 16px 16px;
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 4px;
+}
+
+.site-header .site-icon {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 50%;
+  background: var(--color-surface-container-high);
+}
+
+.site-name {
+  overflow: hidden;
+  font-size: 20px;
+  line-height: 28px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.site-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-on-surface-variant);
+}
+
+.site-status::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-success);
+}
+
+.site-status[data-state='off']::before {
+  background: var(--color-outline);
+}
+
+/* Quick setting tiles: a button per protection, filled while it is on. */
+.toggles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: var(--radius-m);
+  background: var(--color-surface-container-high);
+  color: var(--color-on-surface);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  position: relative;
+  isolation: isolate;
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 100ms linear;
+}
+
+.toggle:hover:not(:disabled)::after {
+  opacity: 0.08;
+}
+
+.toggle[aria-pressed='true'] {
+  background: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+.toggle:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.toggle-label {
+  font-weight: 500;
+}
+
+.toggle-state {
+  font-size: 13px;
+  line-height: 18px;
+  opacity: 0.8;
+}
+
+.site-card .select,
+.site-card select {
+  width: 100%;
+  max-width: none;
+}
+
+.field-label {
+  display: block;
+  margin: 0 4px 6px;
+  color: var(--color-on-surface-variant);
+  font-weight: 500;
+}
+
+/* Actions and settings below the site card. */
+.popup-list {
+  overflow: hidden;
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+}
+
+.popup .row {
+  gap: 16px;
+  min-height: 52px;
+  padding: 8px 16px 8px 20px;
+}
+
+.popup .row-title {
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.popup button.row {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: start;
+}
+
+.popup-empty {
+  padding: 20px;
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  color: var(--color-on-surface-variant);
+}
+
+/* The panic button, at the top while it is switched on. */
+.popup > .button {
+  width: 100%;
+  height: 48px;
+  border-radius: 24px;
+}
+
+.inline-panel {
+  display: grid;
+  gap: 12px;
+  padding: 16px 20px 20px;
+}
+
+.inline-panel p {
+  color: var(--color-on-surface-variant);
+}
+
+.inline-panel .select,
+.inline-panel select {
+  width: 100%;
+  max-width: none;
+}
+
+.checks {
+  display: grid;
+  gap: 4px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 36px;
+  cursor: pointer;
+}
+
+.inline-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.popup-status {
+  padding: 4px 20px 12px;
+  color: var(--color-on-surface-variant);
+}
+
+.reload-bar {
+  position: sticky;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 20px;
+  border-radius: var(--radius-m);
+  background: var(--color-on-surface);
+  color: var(--color-surface);
+  box-shadow: var(--shadow-2);
+}
+
+.reload-bar span {
+  flex: 1;
+}
+
+.reload-bar .button {
+  color: var(--color-primary-container);
+  border-color: transparent;
+}
+
+/* "Site not working?": pausing ad blocking for the site, and turning it back on. */
+.broken-site {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -4px -8px -8px 4px;
+  color: var(--color-on-surface-variant);
+}
+
+.broken-site span {
+  flex: 1;
+}
+
+.broken-site-paused {
+  margin: 0;
+  padding: 4px 4px 4px 14px;
+  border-radius: var(--radius-m);
+  background: var(--color-warning-container);
+  color: var(--color-on-warning-container);
+}

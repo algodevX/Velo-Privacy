@@ -1,0 +1,47 @@
+{
+  "name": "velo-privacy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Blocks ads, trackers and fingerprinting, and controls what sites and your browser remember about you.",
+  "license": "GPL-3.0-or-later",
+  "homepage": "https://github.com/algodevX/Velo-Privacy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/algodevX/Velo-Privacy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/algodevX/Velo-Privacy/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "dev": "tsx scripts/build.ts --target=chromium --watch",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p scripts",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test"
+  },
+  "dependencies": {
+    "preact": "^11.2.0",
+    "tldts": "^7.5.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/chrome": "^0.3.7",
+    "@types/node": "^26.6.6",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.15.0",
+    "prettier": "^3.10.1",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2",
+    "vitest": "^5.1.0"
+  }
+}

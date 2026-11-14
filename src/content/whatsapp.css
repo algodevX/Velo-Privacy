@@ -1,0 +1,29 @@
+/*
+ * WhatsApp Web tool. Each rule applies only while its option sets an attribute on <html>
+ * (see whatsapp.ts); data-velo-revealed, toggled by the keyboard shortcut, lifts them all.
+ *
+ * WhatsApp's class names are generated and change with each release, so the selectors
+ * rely on ids, roles and attributes. #pane-side is the chat list and #main the open chat.
+ */
+
+html:not([data-velo-revealed]) {
+  --velo-blur: blur(7px);
+}
+
+html[data-velo-blur-names] :is(#pane-side span[dir='auto'][title], #main header span[dir='auto']),
+html[data-velo-blur-avatars] :is(#pane-side img, #main header img),
+html[data-velo-blur-previews] #pane-side span[title]:not([dir='auto']),
+html[data-velo-blur-messages] #main :is(.message-in, .message-out) .copyable-text,
+html[data-velo-blur-media] #main :is(.message-in, .message-out) :is(img, video, canvas),
+html[data-velo-blur-input] #main footer [contenteditable='true'] {
+  filter: var(--velo-blur, none);
+  transition: filter 120ms ease-out;
+}
+
+/* Hovering over a chat in the list, a message or the text field shows it. */
+html[data-velo-reveal-on-hover] :is(#pane-side [role='listitem'], #pane-side [role='row']):hover *,
+html[data-velo-reveal-on-hover] #main :is(.message-in, .message-out):hover *,
+html[data-velo-reveal-on-hover] #main header:hover *,
+html[data-velo-reveal-on-hover] #main footer:hover * {
+  filter: none;
+}

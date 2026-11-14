@@ -1,0 +1,48 @@
+/*
+ * YouTube tool. Each rule applies only while its option sets an attribute on <html>
+ * (see youtube.ts). YouTube's element names change from time to time; keep the selectors
+ * to custom element names and attributes rather than generated class names.
+ */
+
+/* Shorts: shelves, grid items, search results, the sidebar entry and the channel tab. */
+html[data-velo-hide-shorts]
+  :is(
+    ytd-reel-shelf-renderer,
+    ytd-rich-shelf-renderer[is-shorts],
+    ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
+    grid-shelf-view-model:has(ytm-shorts-lockup-view-model, ytm-shorts-lockup-view-model-v2),
+    ytd-rich-item-renderer:has(a[href^='/shorts/']),
+    ytd-video-renderer:has(a[href^='/shorts/']),
+    ytd-grid-video-renderer:has(a[href^='/shorts/']),
+    ytd-compact-video-renderer:has(a[href^='/shorts/']),
+    ytd-guide-entry-renderer:has(a[href^='/shorts'], a[title='Shorts']),
+    ytd-mini-guide-entry-renderer:has(a[href^='/shorts']),
+    yt-tab-shape[tab-title='Shorts']
+  ) {
+  display: none !important;
+}
+
+/* Recommendations on the home page. */
+html[data-velo-hide-home-feed] ytd-browse[page-subtype='home'] ytd-rich-grid-renderer {
+  display: none !important;
+}
+
+/* Related videos next to the player. */
+html[data-velo-hide-related]
+  ytd-watch-flexy
+  :is(#related, ytd-watch-next-secondary-results-renderer) {
+  display: none !important;
+}
+
+/* Suggestions over the end of a video, and the grid of videos once it has ended. */
+html[data-velo-hide-end-screen] :is(.ytp-ce-element, .ytp-endscreen-content, .ytp-fullscreen-grid) {
+  display: none !important;
+}
+
+html[data-velo-hide-comments] ytd-watch-flexy #comments {
+  display: none !important;
+}
+
+html[data-velo-hide-live-chat] ytd-watch-flexy :is(#chat-container, ytd-live-chat-frame) {
+  display: none !important;
+}
